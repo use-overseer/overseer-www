@@ -12,13 +12,13 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Install Python (for uploader script)
+      - name: Install Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
-      - name: Install requests
-        run: pip install requests
+      - name: Install dependencies
+        run: pip install requests boto3 botocore
 
       - name: Upload markdown files to Server
         run: python .github/scripts/upload_to_server.py
