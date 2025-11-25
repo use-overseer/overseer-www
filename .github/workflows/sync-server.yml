@@ -1,0 +1,28 @@
+name: Sync Markdown to Server
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install Python (for uploader script)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install requests
+        run: pip install requests
+
+      - name: Upload markdown files to Server
+        run: python .github/scripts/upload_to_server.py
+        env:
+          SERVER_BUCKET_URL: ${{ secrets.SERVER_BUCKET_URL }}
+          SERVER_ACCESS_KEY: ${{ secrets.SERVER_ACCESS_KEY }}
+          SERVER_SECRET_KEY: ${{ secrets.SERVER_SECRET_KEY }}
