@@ -30,9 +30,9 @@ def upload_file(local_path: Path, key: str):
     print(f"✔ Uploaded: {key} → {url}")
 
 def main():
-    root = Path("www/docs")
+    root = Path("public-content/")
     if not root.exists():
-        raise RuntimeError("Directory www/docs does not exist.")
+        raise RuntimeError("Directory public-content/ does not exist.")
 
     for file in root.rglob("*.md"):
         rel_path = file.relative_to(root)
