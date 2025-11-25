@@ -1,5 +1,7 @@
 # Overseer — Public Website Content
 
+[![Sync Markdown to Server](https://github.com/use-overseer/overseer-www/actions/workflows/sync_to_server.yml/badge.svg)](https://github.com/use-overseer/overseer-www/actions/workflows/sync_to_server.yml)
+
 This repository contains the Markdown files used across Overseer's public website.  
 Each page is designed to stay simple, clear, and easy to maintain.
 
