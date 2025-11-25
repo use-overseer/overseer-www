@@ -1,36 +1,43 @@
 import os
 import requests
+from pathlib import Path
 
-BUCKET_URL = os.getenv("SERVER_BUCKET_URL")
-ACCESS_KEY = os.getenv("SERVER_ACCESS_KEY")
-SECRET_KEY = os.getenv("SERVER_SECRET_KEY")
+BASE_URL = os.getenv("BASE_URL")
+API_TOKEN = os.getenv("API_TOKEN")
 
-PUBLIC_DIR = "public-content"
+def upload_file(local_path: Path, key: str):
+    if not BASE_URL:
+        raise RuntimeError("Missing BASE_URL environment variable.")
+    if not API_TOKEN:
+        raise RuntimeError("Missing API_TOKEN environment variable.")
 
-def upload_file(path, key):
-    with open(path, "rb") as f:
-        content = f.read()
+    url = f"{BASE_URL.rstrip('/')}/{key.lstrip('/')}"
 
-    url = f"{BUCKET_URL}/{key}"
     headers = {
-        "Authorization": f"Bearer {ACCESS_KEY}:{SECRET_KEY}",
+        "Authorization": f"Bearer {API_TOKEN}",
         "Content-Type": "text/markdown"
     }
 
-    r = requests.put(url, data=content, headers=headers)
+    with local_path.open("rb") as f:
+        content = f.read()
 
-    if r.status_code not in [200, 201]:
-        print(f"Error subiendo {key}: {r.status_code} -> {r.text}")
-    else:
-        print(f"Subido correctamente: {key}")
+    response = requests.put(url, data=content, headers=headers)
+    if not response.ok:
+        raise RuntimeError(
+            f"Upload failed for {key}: {response.status_code} - {response.text}"
+        )
+
+    print(f"✔ Uploaded: {key} → {url}")
 
 def main():
-    for root, _, files in os.walk(PUBLIC_DIR):
-        for file in files:
-            if file.endswith(".md"):
-                local_path = os.path.join(root, file)
-                key = file
-                upload_file(local_path, key)
+    root = Path("www/docs")
+    if not root.exists():
+        raise RuntimeError("Directory www/docs does not exist.")
+
+    for file in root.rglob("*.md"):
+        rel_path = file.relative_to(root)
+        key = f"{rel_path.as_posix()}"
+        upload_file(file, key)
 
 if __name__ == "__main__":
     main()
