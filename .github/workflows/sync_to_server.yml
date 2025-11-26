@@ -19,11 +19,14 @@ jobs:
           python-version: '3.x'
 
       - name: Install dependencies
-        run: pip install requests boto3 botocore
+        run: pip install boto3 botocore
 
       - name: Upload markdown files to Server
         env:
+          SERVER_BUCKET: ${{ vars.SERVER_BUCKET }}
           SERVER_BUCKET_URL: ${{ vars.SERVER_BUCKET_URL }}
+          SERVER_ENDPOINT: ${{ vars.SERVER_ENDPOINT }}
+          SERVER_REGION: ${{ vars.SERVER_REGION }}
           SERVER_ACCESS_KEY_ID: ${{ secrets.SERVER_ACCESS_KEY_ID }}
           SERVER_SECRET_ACCESS_KEY: ${{ secrets.SERVER_SECRET_ACCESS_KEY }}
         run: python .github/scripts/upload_to_server.py
