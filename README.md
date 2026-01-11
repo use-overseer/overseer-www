@@ -9,22 +9,6 @@ All content stored here is synchronized automatically with our storage layer whe
 
 ---
 
-## Structure
-
-The repository includes the public pages of the site:
-
-- About  
-- Donate  
-- Contact  
-- Compare  
-- Legal Notice  
-- Privacy  
-- Terms  
-
-All files are written in Markdown for clarity and version control.
-
----
-
 ## Workflow
 
 When a release is published, a GitHub Action uploads the updated Markdown files to our object storage.  
